@@ -1,1 +1,1 @@
-# coursera-scala
+# coursera-scalaResources for my course on coursera: Functional Programming in ScalaÉcole Polytechnique Fédérale de Lausanne
