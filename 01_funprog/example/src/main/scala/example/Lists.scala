@@ -41,8 +41,10 @@ object Lists {
    * @return The largest element in `xs`
    * @throws java.util.NoSuchElementException if `xs` is an empty list
    */
-  def max(xs: List[Int]): Int = maxAcc(xs, Int.MinValue)
-
+  def max(xs: List[Int]): Int = xs match {
+    case (a :: as) => maxAcc(as, a)
+    case Nil => throw new NoSuchElementException("empty list entered")
+  }
 
   def maxAcc(xs: List[Int], m: Int): Int = xs match {
     case (a :: as) => if (a > m)  maxAcc(as, a)  else maxAcc(as, m)
