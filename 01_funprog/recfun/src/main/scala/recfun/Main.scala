@@ -34,5 +34,10 @@ object Main {
   /**
    * Exercise 3
    */
-    def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChangeAcc(money: Int, coins: List[Int], count: Int): Int = coins match {
+    case Nil => if (money == 0 && count > 0) 1 else 0
+    case (a :: as) => if (money >= 0) countChangeAcc(money - a, coins, count + a) + countChangeAcc(money, as, count) else 0
+  }
+
+    def countChange(money: Int, coins: List[Int]): Int = countChangeAcc(money, coins, 0)
   }
