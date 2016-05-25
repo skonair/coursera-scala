@@ -110,5 +110,31 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test("intersect contains elements that are in both sets") {
+    new TestSets {
+      val s = intersect( union(s1, s2), union(s2, s3))
+      assert(!contains(s, 1), "Intersect 1")
+      assert(contains(s, 2), "Intersect 2")
+      assert(!contains(s, 3), "Intersect 3")
+    }
+  }
+
+  test("diff contains all elements that are only in one of the sets") {
+    new TestSets {
+      val s = diff( union(s1, s2), union(s2, s3))
+      assert(contains(s, 1), "Diff 1")
+      assert(!contains(s, 2), "Diff 2")
+      assert(!contains(s, 3), "Diff 3")
+    }
+  }
+
+  test("filter contains all elements that are in the set and hold the predicate") {
+    new TestSets {
+      val s = filter( union(s1, s2), (x: Int) => x < 2)
+      assert(contains(s, 1), "Diff 1")
+      assert(!contains(s, 2), "Diff 2")
+    }
+  }
+
 
 }
