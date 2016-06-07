@@ -47,6 +47,10 @@ class TweetSetSuite extends FunSuite {
 
   test("union: set4c and set4d") {
     new TestSets {
+      println(size(set4c))
+      println(size(set4d))
+      println(size(set4c.union(set4d)))
+
       assert(size(set4c.union(set4d)) === 4)
     }
   }
@@ -63,6 +67,12 @@ class TweetSetSuite extends FunSuite {
     }
   }
 
+  test("mostretweeted: 20 retweets") {
+    new TestSets {
+      assert(set5.mostRetweeted.retweets === 20)
+    }
+  }
+
   test("descending: set5") {
     new TestSets {
       val trends = set5.descendingByRetweet
@@ -70,5 +80,6 @@ class TweetSetSuite extends FunSuite {
       assert(trends.head.user == "a" || trends.head.user == "b")
     }
   }
+
 
   }
