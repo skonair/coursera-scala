@@ -1,8 +1,5 @@
 package forcomp
 
-import java.util
-import java.util.Collections
-
 
 object Anagrams {
 
@@ -100,10 +97,9 @@ object Anagrams {
 
   def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match {
     case Nil => List(List())
-    case (a :: as) => {
+    case (a :: as) =>
       val combs = for (s <- spread(a); cs <- combinations(as)) yield s :: cs
       combs ++ combinations(as)
-    }
   }
 
 
@@ -119,10 +115,9 @@ object Anagrams {
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = y match {
     case Nil => x
-    case (a :: as) => {
+    case (a :: as) =>
       val nx = x.map(c => if (c._1 == a._1) (a._1, c._2 - a._2) else c).filter(c => c._2 > 0)
       subtract(nx, as)
-    }
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
@@ -165,5 +160,27 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+
+  def sentenceAnagramsAcc(soccs: Occurrences, combs: List[Occurrences], acc: List[Sentence]): List[Sentence] = soccs match {
+    case Nil => acc
+    case _ =>
+      combs match {
+        case Nil => Nil
+        case (a :: as) =>
+          val words = dictionaryByOccurrences.getOrElse(a, List())
+          if (words.isEmpty) sentenceAnagramsAcc(soccs, as, acc)
+          else {
+            val suboccs = subtract(soccs, a)
+            val newwords = for (ws <- words;
+                                b <- acc) yield ws :: b
+            sentenceAnagramsAcc(suboccs, combinations(suboccs), newwords) ++ sentenceAnagramsAcc(soccs, as, acc)
+          }
+      }
+  }
+
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    val sentenceOccurrencesVal = sentenceOccurrences(sentence)
+    val combs = combinations(sentenceOccurrencesVal)
+    sentenceAnagramsAcc(sentenceOccurrencesVal, combs, List(List()))
+  }
 }
